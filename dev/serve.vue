@@ -17,30 +17,6 @@
             <input
                 class="form-check-input"
                 type="checkbox"
-                id="flexSwitchCheckChecked"
-                v-model="overlay"
-                checked
-            />
-            <label class="form-check-label" for="flexSwitchCheckChecked"
-            >Overlay</label
-            >
-          </div>
-          <div class="form-check form-switch mb-3">
-            <input
-                class="form-check-input"
-                type="checkbox"
-                id="closeSwitchCheckChecked"
-                v-model="clickToClose"
-                checked
-            />
-            <label class="form-check-label" for="closeSwitchCheckChecked"
-            >Click outside card to close</label
-            >
-          </div>
-          <div class="form-check form-switch mb-3">
-            <input
-                class="form-check-input"
-                type="checkbox"
                 id="roundedCheckChecked"
                 v-model="rounded"
                 checked
@@ -83,22 +59,11 @@
             >Background scrollable</label
             >
           </div>
-          <div class="form-check form-switch mb-3">
-            <input
-                class="form-check-input"
-                type="checkbox"
-                id="clickableSwitchCheckChecked"
-                v-model="backgroundClickable"
-            />
-            <label class="form-check-label" for="clickableSwitchCheckChecked"
-            >Background clickable</label
-            >
-          </div>
         </div>
         <div class="col-md-4 col-12">
           <div class="mb-3">
-            <h6> Overlay Color</h6>
-            <sketch-picker v-model="overlayColorSelect"/>
+            <h6> Background Color</h6>
+            <sketch-picker v-model="backgroundColorSelect"/>
           </div>
         </div>
         <div class="col-md-4 col-12">
@@ -151,15 +116,12 @@
       <vue-bottom-sheet
           :max-width="maxWidth"
           :max-height="maxHeight"
-          :overlay="overlay"
-          :click-to-close="clickToClose"
           :effect="effect"
           :rounded="rounded"
           :swipeAble="swipeAble"
-          :overlayColor="overlyHexColor"
+          :backgroundColor="backgroundHexColor"
           :isFullScreen="isFullScreen"
           :backgroundScrollable="backgroundScrollable"
-          :backgroundClickable="backgroundClickable"
           ref="myBottomSheet"
       >
         <div class="sheet-content">
@@ -216,17 +178,14 @@ export default Vue.extend({
 
   data() {
     return {
-      overlay: true,
       maxWidth: "640px",
       maxHeight: "90%",
-      clickToClose: true,
       effect: "fx-default",
       rounded: true,
       swipeAble: true,
       isFullScreen: false,
-      overlayColorSelect: "#0000004D",
+      backgroundColorSelect: "#E5D7D7FF",
       backgroundScrollable: false,
-      backgroundClickable: false,
     };
   },
   components: {
@@ -242,9 +201,9 @@ export default Vue.extend({
     }
   },
   computed: {
-    overlyHexColor() {
-      if (this.overlayColorSelect != null)
-        return this.overlayColorSelect.hex8;
+    backgroundHexColor() {
+      if (this.backgroundColorSelect != null)
+        return this.backgroundColorSelect.hex8;
     }
   }
 });

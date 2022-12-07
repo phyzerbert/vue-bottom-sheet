@@ -63,17 +63,14 @@ Vue.use(VueBottomSheet);
 
 | Prop  | Type | Description | Example |
 | ------------- | ------------- | ------------- | ------------- |
-| overlay  | Boolean  | Remove back overlay  | `:overlay="false"` |
-| click-to-close  | Boolean  | Click outside card to close  | `:click-to-close="false"` |
 | max-width  | String  | Set max-width of component card  | `max-width="640px"` |
 | max-height  | String  | Set max-height of component card  | `max-height="90%"` |
 | effect  | String  | Set effect for component card  | `effect="fx-fadein-scale"` |
 | rounded  | Boolean  | Round the top two corners of the sheet  | `:rounded="false"` |
 | is-full-screen  | Boolean  | Enable or disable full-screen mode  | `:is-full-screen="true"` |
 | swipe-able  | Boolean  | Enable or disable swipe to close | `:swipe-able="false"` |
-| overlay-color  | String  | Set overlay color with opacity | `:overlay-color="#0000004D"` |
 | background-scrollable  | Boolean  | Enable scroll | `:background-scrollable="true"` |
-| background-clickable  | Boolean  | Enable background click, doesn't work if `click-to-close=true` | `:background-clickable="true"` |
+| swipe-limit  | Number  | Set swipe end limit pixels  | `:swipe-limit="50"` |
 
 ## Events
 

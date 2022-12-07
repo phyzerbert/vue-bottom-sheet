@@ -8,13 +8,10 @@
         moving: moving
       }
     ]"
-      v-on="handlers"
       ref="bottomSheet"
-      :style="{ 'pointer-events': backgroundClickable && clickToClose == false ? 'none' : 'all' }"
   >
-    <div v-if="overlay" class="bottom-sheet__backdrop" :style="{ 'background': overlayColor }" />
     <div
-        :style="[{ bottom: cardP+'px', maxWidth: maxWidth, maxHeight: maxHeight },{'height':isFullScreen ? '100%' : 'auto'},{'pointer-events': 'all'}]"
+        :style="[{ bottom: cardP+'px', maxWidth: maxWidth, maxHeight: maxHeight },{'height':isFullScreen ? '100%' : 'auto'},{'pointer-events': 'all'},{'background': backgroundColor}]"
         :class="[
         'bottom-sheet__card',
         { stripe: stripe, square: !rounded },
@@ -56,28 +53,17 @@ export default {
       cardH: null,
       moving: false,
       stripe: 0,
-      handlers: {
-        mousedown: vm.clickOnBottomSheet,
-        touchstart: vm.clickOnBottomSheet
-      }
+      eventType: null,
     };
   },
   props: {
-    overlay: {
-      type: Boolean,
-      default: true
-    },
     maxWidth: {
       type: String,
       default: "640px"
     },
     maxHeight: {
       type: String,
-      default: "95%"
-    },
-    clickToClose: {
-      type: Boolean,
-      default: true
+      default: "90%"
     },
     effect: {
       type: String,
@@ -95,18 +81,21 @@ export default {
       type: Boolean,
       default: false
     },
-    overlayColor: {
+    backgroundColor: {
       type: String,
-      default: "#0000004D"
+      default: "#E5D7D7"
     },
     backgroundScrollable: {
       type: Boolean,
       default: false
     },
-    backgroundClickable: {
-      type: Boolean,
-      default: false
+    swipeLimit: {
+      type: Number,
+      default: 50
     }
+  },
+  mounted() {
+    this.init()
   },
   methods: {
     isIphone() {
@@ -126,19 +115,24 @@ export default {
           this.moving = true;
           if (event.deltaY > 0) {
             this.cardP = delta;
+          } else {
+            this.cardP = 35 - this.cardH + delta;
           }
         }
         if (event.isFinal) {
           this.contentScroll = this.$refs.bottomSheetCardContent.scrollTop;
           this.moving = false;
-          if (this.cardP < -30) {
+          if ((this.cardP < -1 * this.swipeLimit && this.eventType === 'pandown') || (this.cardP < this.swipeLimit - this.cardH && this.eventType === 'panup')) {
             this.opened = false;
-            this.cardP = -this.cardH - this.stripe;
+            this.cardP = -this.cardH - this.stripe + 40;
             document.body.style.overflow = "";
             this.$emit("closed");
           } else {
             this.cardP = 0;
           }
+          // this.eventType = null;
+        } else {
+          this.eventType = event.type
         }
       }
     },
@@ -153,7 +147,7 @@ export default {
             this.effect === "fx-slide-from-right" ||
             this.effect === "fx-slide-from-left"
                 ? 0
-                : -this.cardH - this.stripe;
+                : -this.cardH - this.stripe + 40;
         if (!this.inited) {
           this.inited = true;
           let options = {
@@ -183,7 +177,7 @@ export default {
         if (!this.$props.backgroundScrollable) {
           document.body.style.overflow = "hidden";
         }
-        
+
         this.$emit("opened");
       });
     },
@@ -193,20 +187,10 @@ export default {
           this.effect === "fx-slide-from-right" ||
           this.effect === "fx-slide-from-left"
               ? 0
-              : -this.cardH - this.stripe;
+              : -this.cardH - this.stripe + 40;
       document.body.style.overflow = "";
       this.$emit("closed");
     },
-    clickOnBottomSheet(event) {
-      if (this.clickToClose) {
-        if (
-            event.target.classList.contains("bottom-sheet__backdrop") ||
-            event.target.classList.contains("bottom-sheet")
-        ) {
-          this.close();
-        }
-      }
-    }
   },
   beforeDestroy() {
     this.hammer?.pan?.destroy();
@@ -220,6 +204,7 @@ export default {
   z-index: 99999;
   transition: all 0.4s ease;
   position: relative;
+  pointer-events: all;
 
   * {
     box-sizing: border-box;
@@ -242,10 +227,8 @@ export default {
 
   &__card {
     width: 100%;
-
     position: fixed;
-    background: white;
-    border-radius: 14px 14px 0 0;
+    border-radius: 8px 8px 0 0;
     left: 50%;
     z-index: 9999;
     margin: 0 auto;
@@ -283,28 +266,18 @@ export default {
   }
 
   &__pan {
-    padding-bottom: 20px;
-    padding-top: 15px;
-    height: 38px;
+    padding-bottom: 8px;
+    padding-top: 8px;
   }
 
   &__bar {
     display: block;
-    width: 50px;
-    height: 3px;
+    width: 40px;
+    height: 4px;
     border-radius: 14px;
     margin: 0 auto;
     cursor: pointer;
     background: rgba(0, 0, 0, 0.3);
-  }
-
-  &.closed {
-    opacity: 0;
-    visibility: hidden;
-
-    .bottom-sheet__backdrop {
-      animation: hide 0.3s ease;
-    }
   }
 
   &.moving {
