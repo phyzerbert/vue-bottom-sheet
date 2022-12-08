@@ -116,6 +116,7 @@
       <vue-bottom-sheet
           :max-width="maxWidth"
           :max-height="maxHeight"
+          :min-height="55"
           :effect="effect"
           :rounded="rounded"
           :swipeAble="swipeAble"
@@ -159,10 +160,38 @@
             recusandae rerum tempore. Ab adipisci beatae, distinctio ea nemo
             omnis sed similique veniam.
           </p>
+          <h2>
+            Lorem Ipsum
+          </h2>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi
+            excepturi explicabo id illum magnam possimus provident quae
+            recusandae rerum tempore. Ab adipisci beatae, distinctio ea nemo
+            omnis sed similique veniam.
+          </p>
+          <h2>
+            Lorem Ipsum
+          </h2>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi
+            excepturi explicabo id illum magnam possimus provident quae
+            recusandae rerum tempore. Ab adipisci beatae, distinctio ea nemo
+            omnis sed similique veniam.
+          </p>
+          <h2>
+            Lorem Ipsum
+          </h2>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi
+            excepturi explicabo id illum magnam possimus provident quae
+            recusandae rerum tempore. Ab adipisci beatae, distinctio ea nemo
+            omnis sed similique veniam.
+          </p>
           <button type="button" class="btn btn-danger" @click="close">
             Close
           </button>
         </div>
+        <template #handler>HHH</template>
       </vue-bottom-sheet>
     </div>
   </div>

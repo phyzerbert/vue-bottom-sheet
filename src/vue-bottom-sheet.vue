@@ -19,8 +19,10 @@
       ]"
         ref="bottomSheetCard"
     >
-      <div class="bottom-sheet__pan" ref="pan">
-        <div class="bottom-sheet__bar"/>
+      <div class="bottom-sheet__pan" ref="pan" @click="opened ? close() : open()">
+        <slot name="handler">
+          <div class="bottom-sheet__bar"></div>
+        </slot>
       </div>
       <div
           :style="{ height: contentH }"
@@ -64,6 +66,10 @@ export default {
     maxHeight: {
       type: String,
       default: "90%"
+    },
+    minHeight: {
+      type: Number,
+      default: 40,
     },
     effect: {
       type: String,
@@ -123,12 +129,14 @@ export default {
           this.contentScroll = this.$refs.bottomSheetCardContent.scrollTop;
           this.moving = false;
           if ((this.cardP < -1 * this.swipeLimit && this.eventType === 'pandown') || (this.cardP < this.swipeLimit - this.cardH && this.eventType === 'panup')) {
-            this.opened = false;
-            this.cardP = -this.cardH - this.stripe + 40;
+            this.cardP = -this.cardH - this.stripe + this.minHeight;
             document.body.style.overflow = "";
+            this.opened = false;
             this.$emit("closed");
           } else {
             this.cardP = 0;
+            this.opened = true
+            this.$emit("opened");
           }
           // this.eventType = null;
         } else {
@@ -147,7 +155,7 @@ export default {
             this.effect === "fx-slide-from-right" ||
             this.effect === "fx-slide-from-left"
                 ? 0
-                : -this.cardH - this.stripe + 40;
+                : -this.cardH - this.stripe + this.minHeight;
         if (!this.inited) {
           this.inited = true;
           let options = {
@@ -187,7 +195,7 @@ export default {
           this.effect === "fx-slide-from-right" ||
           this.effect === "fx-slide-from-left"
               ? 0
-              : -this.cardH - this.stripe + 40;
+              : -this.cardH - this.stripe + this.minHeight;
       document.body.style.overflow = "";
       this.$emit("closed");
     },
@@ -268,6 +276,7 @@ export default {
   &__pan {
     padding-bottom: 8px;
     padding-top: 8px;
+    text-align: center;
   }
 
   &__bar {
